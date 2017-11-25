@@ -1,4 +1,4 @@
-# README
+# uiFlow README
 
 An extensible node-based UI editor for flexible UI flows & usage between projects.
 
@@ -14,21 +14,17 @@ Add UIFlow.cs to an empty GameObject. If a UI already exists in the scene you ca
 
 ### Nodes
 
-**In/Out Nodes**
-
+**In/Out Nodes**  
 These nodes are the basic connectors, a set of nodes that triggers the UI flow and a set that leaves it.
 Includes *OnSceneLoad*,*OnActivationCalled* for **IN** and *LoadScene*, *Deactivate* for **OUT.**
 
-**Panel & Window Nodes**
-
+**Panel & Window Nodes**  
 These are the nodes you'll use the most.
 
-**Custom Nodes**
-
+**Custom Nodes**  
 Custom nodes that have been build by the team or other users.
 
-**Macro Nodes**
-
+**Macro Nodes**  
 Nodes containing Flows which contain specialized *In* and *Out* nodes to connect to the containing flow. These can be used anywhere in the project
 
 ### Connections
