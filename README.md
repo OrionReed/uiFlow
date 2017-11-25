@@ -1,4 +1,4 @@
-# uiFlow README
+# uiFlow
 
 An extensible node-based UI editor for flexible UI flows & usage between projects.
 
@@ -19,7 +19,11 @@ These nodes are the basic connectors, a set of nodes that triggers the UI flow a
 Includes *OnSceneLoad*,*OnActivationCalled* for **IN** and *LoadScene*, *Deactivate* for **OUT.**
 
 **Panel & Window Nodes**  
-These are the nodes you'll use the most.
+These are the nodes you'll use the most. 
+* They dynamically resize based on the number of IN/OUTs
+* Right click to create new OUT
+* IN/OUT connections are renamable, automatically renaming UI text.
+* The Focus button lets you bring up the corresponding UI in the editor as if in-game.
 
 **Custom Nodes**  
 Custom nodes that have been build by the team or other users.
@@ -29,11 +33,8 @@ Nodes containing Flows which contain specialized *In* and *Out* nodes to connect
 
 ### Connections
 Connections are made by clicking an OUT point then an IN or dragged between two points. No IN > IN or OUT > OUT connections can be made.
+You can use connections to define where & *how* the flow moves.
+You can set a connection to be a normal connection, or an Extension: Current UI stays open and is interactable. or an Overlay: Current UI stays open but is no longer interactable and may have an effect applied (blur, pixelate) rendering behind the new UI.
 
 ### Hierarchy View
-Where the magic happens.
-
-### Right Click Menus
-
-**On Background**
-* Create Node
+Where the magic happens. Each node, connection, label change, IN/OUT added, etcetera applies to the Hierarchy. Proper UI wiring is automated by the editor, including text content, hierarchy organisation, GameObject names, and management of active UI elements.
