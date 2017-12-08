@@ -1,33 +1,40 @@
-﻿using System.Collections;
+﻿//Written with ♥ by Ankit Priyarup
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System;
 
+[Serializable]
+public class BaseComponents
+{
+	public BaseNode node;
+	public Rect rect;
+	public string txt;
+
+	public BaseComponents(string _txt)
+	{
+		txt = _txt;
+		rect = new Rect();
+	}
+}
+[Serializable]
 public abstract class BaseNode : ScriptableObject
 {
+	public int id;
 	public Rect winRect;
 	public string winTitle = "";
 	public Texture2D winIcon;
 	public Texture2D curveJoinR;
-	public Texture2D curveJoinL;
-	public bool ifMsgNode = false;
+	public Texture2D curveJoinL;	
 	public bool ifConnected = false;
+	public nodeType type;
 	public BaseNode rootNode;
 	public List<BaseComponents> attributes = new List<BaseComponents>();
-    
-	public class BaseComponents
-    {
-        public BaseNode node;
-        public Rect rect;
-        public string txt;
-
-        public BaseComponents(string _txt)
-        {
-            txt = _txt;
-            rect = new Rect();
-        }
-    }
-
+	public connType connectionType = connType.Default;
+	
+	public enum connType {Default, Extension, Overlay};	
+	public enum nodeType {Message, MainMenu, QuitConfirm, SinglePlayer};
+	
 	public virtual void DrawWindow()
 	{
 		GUI.skin = NodeEditor.skin;
@@ -35,7 +42,7 @@ public abstract class BaseNode : ScriptableObject
 		curveJoinR = EditorGUIUtility.Load("joinR.png") as Texture2D;
 		curveJoinL = EditorGUIUtility.Load("joinL.png") as Texture2D;
 
-		if (!ifMsgNode)
+		if (type != nodeType.Message)
 		{
 			GUI.DrawTexture(new Rect(winRect.width - 34, 14, 20, 20), winIcon, ScaleMode.ScaleToFit, true);
 			Handles.BeginGUI();
@@ -55,7 +62,10 @@ public abstract class BaseNode : ScriptableObject
 		rect.x -= winRect.x;
 		rect.y -= winRect.y;
 		for (int i=0; i<attributes.Count; i++)
-			if (attributes[i].rect.Equals(rect)) attributes[i].node = node;
+		{
+			if (attributes[i].rect.Equals(rect))
+				if (node != NodeEditor.data.n[0]) attributes[i].node = node;
+		}
 	}
 
 	public virtual void SetInput(BaseNode input, Vector2 clickPos)
@@ -66,7 +76,7 @@ public abstract class BaseNode : ScriptableObject
         Rect titleRect = new Rect(0, 0, winRect.width, 60);
 		if (titleRect.Contains(clickPos) && !input.ifConnected)
 		{
-			if (input.ifMsgNode) input.ifConnected = true;
+			if (input.type == nodeType.Message) input.ifConnected = true;
 			rootNode = input;
 		}
 	}
@@ -76,17 +86,9 @@ public abstract class BaseNode : ScriptableObject
 		if (node.rootNode != null)
 		{
 			BaseNode sNode = node.rootNode;
-			if (sNode.ifMsgNode) sNode.ifConnected = false;
+			if (sNode.type == nodeType.Message) sNode.ifConnected = false;
 			for (int i=0; i<sNode.attributes.Count; i++)
 				if(sNode.attributes[i].node == node) sNode.attributes[i].node = null;
 		}
-	}
-
-	public virtual void setWidth(float x, float y, float width)
-	{
-		winRect.x = x;
-		winRect.y = y;
-		winRect.width = width;
-		winRect.height += 60;
 	}
 }
